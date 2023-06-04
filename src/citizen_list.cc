@@ -3,142 +3,63 @@
 using namespace citizen;
 using namespace std;
 
-CitizenList::CitizenList() : _citizen(nullptr), _size(0) { }
-
 int CitizenList::size() const {
-    return _size; 
+    return _data.size(); 
 }
-
-CitizenList::CitizenList(const CitizenList& other) : _citizen(new CitizenPtr[other._size]), _size(other._size)
-{    
-    for (int i = 0; i < _size; ++i) {
-        _citizen[i] = other[i]->clone();
+CitizenList::CitizenList(const CitizenList& other)
+{
+    _data.reserve(other.size());
+    for (const auto& ptr : other._data)
+    {
+        _data.push_back(ptr->clone());
     }
 }
-
 CitizenPtr CitizenList::operator[](const int index) const {
-    if (index < 0 || _size <= index) {
+    if (index < 0) {
         throw out_of_range("[CitizenList::operator[]] Index is out of range.");
     }
-    return _citizen[index];
+    return _data[index];
 }
-
 CitizenList& CitizenList::operator=(const CitizenList& rhs) {
     CitizenList copy(rhs);
     copy.swap(*this);
     return *this;
 }
-
-std::ostream& citizen::operator<<(std::ostream& stream, const CitizenPtr& people)
-{
-    switch (people->get_type())
-    {
-    case::CitizenType::Schoolboy:
-        stream << endl << "\tШкольник: \t" << endl << people->get_last_name() << " " << people->get_first_name() << " " << people->get_middle_name() << endl << "Название школы: " << people->get_school_name() << endl
-            << "номер ученического билета: " << people->get_school_ID_number() << endl << "Принадлежность к многодетной семье: " << people->get_large_fam() << endl << "Размер выплаты: " << people->payment() << endl << endl;
-        return stream;
-    case::CitizenType::Student:
-        stream << endl << "\tСтудент: \t" << endl << people->get_last_name() << " " << people->get_first_name() << " " << people->get_middle_name() << endl << "Название университета: " << people->get_university_name() << endl
-            << "номер зачётной книжки: " << people->get_student_ID_number() << endl << "средний балл: " << people->get_average_grade() << endl << "Размер выплаты: " << people->payment() << endl << endl;
-        return stream;
-    case::CitizenType::Pensioner:
-        stream << endl << "\tПенсионер: \t" << endl << people->get_last_name() << " " << people->get_first_name() << " " << people->get_middle_name() << endl << "СНИЛС: " << people->get_snils() << endl << "стаж: " << people->get_experience() << endl << "Размер выплаты: " << people->payment() << endl << endl;
-        return stream;
-    default:
-        throw runtime_error("[Function::compute_derivative] Invalid function type.");
-    }
-}
-
 void CitizenList::swap(CitizenList& other) {
-    std::swap(this->_citizen, other._citizen);
-    std::swap(this->_size, other._size);
+    std::swap(this->_data, other._data);
 }
-
-void CitizenList::add(CitizenPtr const citizen) {
-    auto new_citizen = new CitizenPtr[_size + 1];
-
-    for (int i = 0; i < _size; ++i) {
-        new_citizen[i] = _citizen[i];
-    }
-    new_citizen[_size] = citizen;
-
-    delete[] _citizen;
-    _citizen = new_citizen;
-    ++_size;
+void CitizenList::add(CitizenPtr f) {
+    _data.push_back(f);
 }
-
-void CitizenList::insert(CitizenPtr citizen, int index) {
-    if (index < 0 || _size <= index) {
+void CitizenList::insert(CitizenPtr people, int index)
+{
+    if (index < 0)
+    {
         throw out_of_range("[CitizenList::operator[]] Index is out of range.");
     }
-    auto copy = new CitizenPtr[_size + 1];
-    for (int i = 0; i < _size; i++)
-    {
-        if (i < index)
-        {
-            copy[i] = _citizen[i];
-        }
-        else
-            copy[i + 1] = _citizen[i];
-    }
-    copy[index] = citizen;
-    delete[] _citizen;
-    _citizen = copy;
-    _size++;
+    auto iter = _data.cbegin();
+    _data.emplace(iter + index, people);
 }
-
-void CitizenList::installation(CitizenPtr citizen, int index) {
-    if (index < 0 || _size <= index) {
+void CitizenList::remove(int index)
+{
+    if (index < 0)
+    {
         throw out_of_range("[CitizenList::operator[]] Index is out of range.");
     }
-    auto copy = new CitizenPtr[_size];
-    for (int i = 0; i < _size; i++)
-    {
-        copy[i] = _citizen[i];
-    }
-    copy[index] = citizen;
-    delete[] _citizen;
-    _citizen = copy;
+    auto iter = _data.cbegin();
+    _data.erase(iter + index);
 }
-
-void CitizenList::remove(int index) {
-    if (index < 0 || _size <= index) {
-        throw out_of_range("[CitizenList::remove()] Index is out of range.");
-    }
-    auto copy = new CitizenPtr[_size - 1];
-
-    for (int i = 0; i != _size - 1; i++)
-    {
-        if (i < index)
-        {
-            copy[i] = _citizen[i];
-        }
-        else
-            copy[i] = _citizen[i + 1];
-    }
-    delete[] _citizen;
-    _citizen = copy;
-    _size--;
-}
-
-CitizenList::~CitizenList() {
-    for (int i = 0; i < _size; ++i) {
-        delete _citizen[i];
-    }
-    delete[] _citizen;
-}
-
-int citizen::search_max_payment(const CitizenList& citizen)
+int citizen::search_max_payment(const CitizenList& _Citizen)
 {
     int max_index = -1;
-    double max_payment = -1;
+    double max_payment = 0;
 
-    auto n = citizen.size();
+    auto n = _Citizen.size();
 
     for (int i = 0; i < n; i++)
     {
-        auto value = citizen[i]->payment();
-        if (value >= max_payment || max_index == -1)
+        auto value = _Citizen[i]->payment();
+        if (value > max_payment || max_index == -1)
         {
             max_index = i;
             max_payment = value;

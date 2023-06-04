@@ -32,11 +32,11 @@ int Menu()
 	while (KeyPres != 13)
 	{
 		cout<<"\tМеню\t"<< endl;
-		Arrow(1, position); cout<< "Вставить элемент в список по указанному индексу"<<endl;
-		Arrow(2, position); cout << "Удалить элемент из списка по указаному индексу" << endl;
+		Arrow(1, position); cout<< "Добавить элемент в конец списка"<<endl;
+		Arrow(2, position); cout << "Вставить элемент в список по указанному индексу" << endl;
 		Arrow(3, position); cout << "Вывести список на экран"<<endl;
 		Arrow(4, position); cout << "Поиск по максимальной выплате" << endl;
-		Arrow(5, position); cout << "Добавить элемент в конец списка" << endl;
+		Arrow(5, position); cout << "Удалить элемент из списка по указаному индексу" << endl;
 		Arrow(6, position); cout << "Выход" << endl << endl;
 		KeyPres = GetKey();
 		system("cls");
@@ -55,7 +55,6 @@ int Menu()
 int main() {
 	setlocale(LC_ALL, "Russian");
 	CitizenList List;
-	CitizenPtr citizen1;
 	while (true)
 	{
 		int choice1 = Menu();
@@ -63,16 +62,12 @@ int main() {
 		{
 		case 1:
 		{
-			cout << "Вы попали в подменю вставки элемента в список по указаному индексу" << endl;
-			int index = 0;
-			cout << "Введите индекс для вставки элемента" << endl;
-			cin >> index;
-			cout << "Выберите какого жителя вы хотите добавить: Schoolboy - 1, Student - 2, Pensioner - 3" << endl;
+			cout << "Выберите какого гражданина вы хотите добавить: Schoolboy - 1, Student - 2, Pensioner - 3" << endl;
 			int choice2 = 0;
 			cin >> choice2;
 			if (choice2 != 1 && choice2 != 2 && choice2 != 3)
 			{
-				cout << "Вы ввели некоректные данные!";
+				cout << "Вы ввели некоректные данные!" << endl;
 				break;
 			}
 			std::string first_name;
@@ -82,81 +77,192 @@ int main() {
 			switch (choice2)
 			{
 
-				case 1: //школьник
-				{
-					std::string school_name;
-					int shool_ID_number;
-					bool large_fam;
+			case 1:
+			{
+				std::string school_name;
+				int ID_number;
+				bool large_fam;
 
-					cout << "Введите фамилию: " << endl;
-					cin >> last_name;
-					cout << "Введите имя: " << endl;
-					cin >> first_name;
-					cout << "Введите отчество: " << endl;
-					cin >> middle_name;
-					cout << "Введите название школы: " << endl;
-					cin >> school_name;
-					cout << "Введите номер ученического билет: ";
-					cin >> shool_ID_number;
-					cout << "Введите флаг принадлежности к многодетной семье (1/0): ";
-					cin >> large_fam;
+				cout << "Введите фамилию: " << endl;
+				cin >> last_name;
+				cout << "Введите имя: " << endl;
+				cin >> first_name;
+				cout << "Введите отчество: " << endl;
+				cin >> middle_name;
+				cout << "Введите название школы: " << endl;
+				cin >> school_name;
+				cout << "Введите номер ученического билет: " << endl;
+				cin >> ID_number;
+				cout << "Введите флаг принадлежности к многодетной семье (1/0): " << endl;
+				cin >> large_fam;
 
-					citizen1 = Citizen::create_schoolboy(last_name, first_name, middle_name, school_name, shool_ID_number, large_fam);
-					break;
-				}
-				case 2:
-				{
-					std::string university_name;
-					int student_ID_number;
-					double average_grade;
+				List.add(make_shared<Schoolboy>(last_name, first_name, middle_name, school_name, ID_number, large_fam));
+				break;
+			}
+			case 2:
+			{
+				std::string university_name;
+				int ID_number;
+				double average_grade;
 
-					cout << "Введите фамилию: " << endl;
-					cin >> last_name;
-					cout << "Введите имя: " << endl;
-					cin >> first_name;
-					cout << "Введите отчество: " << endl;
-					cin >> middle_name;
-					cout << "Введите название университета: " << endl;
-					cin >> university_name;
-					cout << "Введите номер зачётной книжки: " << endl;
-					cin >> student_ID_number;
-					cout << "Введите средний балл " << endl;
-					cin >> average_grade;
+				cout << "Введите фамилию: " << endl;
+				cin >> last_name;
+				cout << "Введите имя: " << endl;
+				cin >> first_name;
+				cout << "Введите отчество: " << endl;
+				cin >> middle_name;
+				cout << "Введите название университета: " << endl;
+				cin >> university_name;
+				cout << "Введите номер зачётной книжки: " << endl;
+				cin >> ID_number;
+				cout << "Введите средний балл " << endl;
+				cin >> average_grade;
 
-					citizen1 = Citizen::create_student(last_name, first_name, middle_name, university_name, student_ID_number, average_grade);
-					break;
+				List.add(make_shared<Student>(last_name, first_name, middle_name, university_name, ID_number, average_grade));
+				break;
 
-				}
-				case 3:
-				{
+			}
+			case 3:
+			{
 
-					std::string snils;
-					int experience;
+				std::string snils;
+				int experience;
 
-					cout << "Введите фамилию: " << endl;
-					cin >> last_name;
-					cout << "Введите имя: " << endl;
-					cin >> first_name;
-					cout << "Введите отчество: " << endl;
-					cin >> middle_name;
-					cout << "Введите снилс: " << endl;
-					cin >> snils;
-					cout << "Введите стаж: " << endl;
-					cin >> experience;
-					citizen1 = Citizen::create_pensioner(last_name, first_name, middle_name, snils, experience);
-					break;
-
-				}
-			}	
-				List.insert(citizen1, index);
+				cout << "Введите фамилию: " << endl;
+				cin >> last_name;
+				cout << "Введите имя: " << endl;
+				cin >> first_name;
+				cout << "Введите отчество: " << endl;
+				cin >> middle_name;
+				cout << "Введите снилс: " << endl;
+				cin >> snils;
+				cout << "Введите стаж: " << endl;
+				cin >> experience;
+				List.add(make_shared<Pensioner>(last_name, first_name, middle_name, snils, experience));
+				break;
+			}
+			}
 			break;
 		}
 		case 2: {
 
+			cout << "Вы попали в подменю вставки элемента в список по указаному индексу" << endl;
+			int index = 0;
+			cout << "Введите индекс для вставки элемента" << endl;
+			cin >> index;
+			cout << "Выберите какого гражданина вы хотите добавить: Schoolboy - 1, Student - 2, Pensioner - 3" << endl;
+			int choice2 = 0;
+			cin >> choice2;
+			if (choice2 != 1 && choice2 != 2 && choice2 != 3)
+			{
+				cout << "Вы ввели некоректные данные!" << endl;
+				break;
+			}
+			std::string first_name;
+			std::string last_name;
+			std::string middle_name;
+
+			switch (choice2)
+			{
+
+			case 1: //школьник
+			{
+				std::string school_name;
+				int ID_number;
+				bool large_fam;
+
+				cout << "Введите фамилию: " << endl;
+				cin >> last_name;
+				cout << "Введите имя: " << endl;
+				cin >> first_name;
+				cout << "Введите отчество: " << endl;
+				cin >> middle_name;
+				cout << "Введите название школы: " << endl;
+				cin >> school_name;
+				cout << "Введите номер ученического билет: " << endl;
+				cin >> ID_number;
+				cout << "Введите флаг принадлежности к многодетной семье (1/0): " << endl;
+				cin >> large_fam;
+
+				List.insert(make_shared<Schoolboy>(last_name, first_name, middle_name, school_name, ID_number, large_fam), index);
+				break;
+			}
+			case 2:
+			{
+				std::string university_name;
+				int ID_number;
+				double average_grade;
+
+				cout << "Введите фамилию: " << endl;
+				cin >> last_name;
+				cout << "Введите имя: " << endl;
+				cin >> first_name;
+				cout << "Введите отчество: " << endl;
+				cin >> middle_name;
+				cout << "Введите название университета: " << endl;
+				cin >> university_name;
+				cout << "Введите номер зачётной книжки: " << endl;
+				cin >> ID_number;
+				cout << "Введите средний балл " << endl;
+				cin >> average_grade;
+
+				List.insert(make_shared<Student>(last_name, first_name, middle_name, university_name, ID_number, average_grade), index);
+				break;
+
+			}
+			case 3:
+			{
+
+				std::string snils;
+				int experience;
+
+				cout << "Введите фамилию: " << endl;
+				cin >> last_name;
+				cout << "Введите имя: " << endl;
+				cin >> first_name;
+				cout << "Введите отчество: " << endl;
+				cin >> middle_name;
+				cout << "Введите снилс: " << endl;
+				cin >> snils;
+				cout << "Введите стаж: " << endl;
+				cin >> experience;
+				List.insert(make_shared<Pensioner>(last_name, first_name, middle_name, snils, experience), index);
+				break;
+
+			}
+			}
+			break;
+		}
+		case 3: {
+			int size = List.size();
+			if (size == 0)
+			{
+				cout << "В вашем списке нет людей!" << endl << "Добавьте граждан и попробуйте снова!" << endl << endl;
+				break;
+			}
+			for (int i = 0; i < size; i++)
+			{
+				List[i]->print();
+			}
+			break;
+		}
+		case 4: {
+			if (List.size() == 0)
+			{
+				cout << "В вашем списке нет людей!" << endl << "Добавьте граждан и попробуйте снова!" << endl << endl;
+				break;
+			}
+			int index = search_max_payment(List);
+			cout << "Гражданин с максимальной выплатой: " << endl;
+			List[index]->print();
+			break;
+		}
+		case 5:
+		{
 			cout << "Вы попали в подменю удаление объекта" << endl;
 			if (List.size() == 0)
 			{
-				cout << "В вашем списке нет работников!" << endl << "Добавьте работников и попробуйте снова!" << endl << endl;
+				cout << "В вашем списке нет людей!" << endl << "Добавьте граждан и попробуйте снова!" << endl << endl;
 				break;
 			}
 			cout << "Введите индекс объекта, который хотите удалить" << endl;
@@ -164,115 +270,6 @@ int main() {
 			cin >> index;
 			List.remove(index);
 			break;
-		}
-		case 3: {
-			int size = List.size();
-			if (size == 0)
-			{
-				cout << "В вашем списке нет работников!" << endl << "Добавьте работников и попробуйте снова!" << endl << endl;
-				break;
-			}
-			for (int i = 0; i < size; i++)
-			{
-				cout << List[i];
-			}
-			break;
-		}
-		case 4: {
-			if (List.size() == 0)
-			{
-				cout << "В вашем списке нет работников!" << endl << "Добавьте работников и попробуйте снова!" << endl << endl;
-				break;
-			}
-			int index = search_max_payment(List);
-			cout << "Работник с максимальной заработной платой: " << endl;
-			cout << List[index];
-			break;
-		}
-		case 5:
-		{
-				cout << "Выберите какого работника вы хотите добавить: Schoolboy - 1, Student - 2, Pensioner - 3" << endl;
-				int choice2 = 0;
-				cin >> choice2;
-				if (choice2 != 1 && choice2 != 2 && choice2 != 3)
-				{
-					cout << "Вы ввели некоректные данные!";
-					break;
-				}
-				std::string first_name;
-				std::string last_name;
-				std::string middle_name;
-
-				switch (choice2)
-				{
-
-				case 1:
-				{
-					std::string school_name;
-					int shool_ID_number;
-					bool large_fam;
-
-					cout << "Введите фамилию: " << endl;
-					cin >> last_name;
-					cout << "Введите имя: " << endl;
-					cin >> first_name;
-					cout << "Введите отчество: " << endl;
-					cin >> middle_name;
-					cout << "Введите название школы: " << endl;
-					cin >> school_name;
-					cout << "Введите номер ученического билет: " << endl;
-					cin >> shool_ID_number;
-					cout << "Введите флаг принадлежности к многодетной семье (1/0): " << endl;
-					cin >> large_fam;
-
-					citizen1 = Citizen::create_schoolboy(last_name, first_name, middle_name, school_name, shool_ID_number, large_fam);
-					break;
-				}
-				case 2:
-				{
-					std::string university_name;
-					int student_ID_number;
-					double average_grade;
-
-					cout << "Введите фамилию: " << endl;
-					cin >> last_name;
-					cout << "Введите имя: " << endl;
-					cin >> first_name;
-					cout << "Введите отчество: " << endl;
-					cin >> middle_name;
-					cout << "Введите название университета: " << endl;
-					cin >> university_name;
-					cout << "Введите номер зачётной книжки: " << endl;
-					cin >> student_ID_number;
-					cout << "Введите средний балл " << endl;
-					cin >> average_grade;
-
-					citizen1 = Citizen::create_student(last_name, first_name, middle_name, university_name, student_ID_number, average_grade);
-					break;
-
-				}
-				case 3:
-				{
-
-					std::string snils;
-					int experience;
-
-					cout << "Введите фамилию: " << endl;
-					cin >> last_name;
-					cout << "Введите имя: " << endl;
-					cin >> first_name;
-					cout << "Введите отчество: " << endl;
-					cin >> middle_name;
-					cout << "Введите снилс: " << endl;
-					cin >> snils;
-					cout << "Введите стаж: " << endl;
-					cin >> experience;
-					citizen1 = Citizen::create_pensioner(last_name, first_name, middle_name, snils, experience);
-					break;
-				}
-				}
-				List.add(citizen1);
-				break;
 		}
 			case 6: 
 			{

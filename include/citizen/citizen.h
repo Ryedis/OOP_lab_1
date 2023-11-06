@@ -27,7 +27,7 @@ namespace citizen {
 		std::string get_first_name() const;
 		std::string get_middle_name() const;
 		void set_last_name(std::string last_name);
-		void set_first_ame(std::string first_name);
+		void set_first_name(std::string first_name);
 		void set_middle_name(std::string middle_name);
 		Citizen(std::string _last_name, std::string _first_name, std::string _middle_name);
 	};

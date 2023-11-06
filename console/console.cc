@@ -255,6 +255,7 @@ int main() {
 			int index = search_max_payment(List);
 			cout << "Гражданин с максимальной выплатой: " << endl;
 			List[index]->print();
+			cout << "Размер выплаты: " << List[index]->payment() << endl;
 			break;
 		}
 		case 5:

@@ -51,7 +51,7 @@ int Pensioner::get_experience() const {
 void Citizen::set_last_name(string _last_name) {
 	last_name = _last_name;
 }
-void Citizen::set_first_ame(std::string _first_name) {
+void Citizen::set_first_name(std::string _first_name) {
 	first_name = _first_name;
 }
 void Citizen::set_middle_name(std::string _middle_name) {
